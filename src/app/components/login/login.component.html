@@ -1,0 +1,14 @@
+<form [formGroup]   ="loginForm!">
+    <div class="mb-3" >
+      <label for="exampleInputEmail1" class="form-label">Nom </label>
+      <input formControlName="name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <small  *ngIf="loginForm.controls['name'].dirty && loginForm.controls['name'].hasError('required')"class="text-danger">Username reqiurede</small>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input formControlName="Password" type="password" class="form-control" id="exampleInputPassword1">
+    </div>
+    <small  *ngIf="loginForm.controls['Password'].dirty && loginForm.controls['Password'].hasError('required')"class="text-danger">Psswordreqiurede</small> <tr></tr>
+
+    <button (click)="onlogin()" type="submit" class="btn btn-primary">Submit</button>
+  </form>

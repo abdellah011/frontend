@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const environment = {\n  production: false,\n  apiBaseUrl: 'http://localhost:5071/api' // ✅ No trailing slash\n\n};","map":null,"metadata":{},"sourceType":"module"}

@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const AppRoutes = [{\n  path: '',\n  redirectTo: 'login',\n  pathMatch: 'full'\n}, {\n  path: '**',\n  redirectTo: 'dashboard'\n}];","map":null,"metadata":{},"sourceType":"module"}

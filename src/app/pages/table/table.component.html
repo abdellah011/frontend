@@ -1,0 +1,63 @@
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-title">Table d'utilisateurs</h4>
+    <button mat-raised-button color="primary" (click)="addUser()">Ajouter utilisateur</button>
+  </div>
+
+  <div class="card-body">
+    <table class="table">
+      <thead class="text-primary">
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Departement</th>
+          <th>Mot de Passe</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users"> 
+          <td>{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.department }}</td>
+          <td>{{ user.Password }}</td>
+          
+          <td>
+            <button mat-button color="primary" (click)="editUser(user)">Modifier</button>
+            <button mat-button color="warn" (click)="deleteUser(user.id)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ✅ Edit Form -->
+  <div *ngIf="isEditing" class="edit-form mt-3">
+    <h5>Modification d'utilisateur</h5>
+    <mat-form-field class="full-width">
+      <mat-label>Nom</mat-label>
+      <input matInput [(ngModel)]="selectedUser.name" placeholder=" Saisir le nom d'utilisateur">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="selectedUser.email" placeholder="Saisir l'email d'utilisateur">
+    </mat-form-field>
+
+  
+    <mat-form-field class="full-width">
+      <mat-label>Mot de passe</mat-label>
+      <input matInput [(ngModel)]="selectedUser.Password" placeholder="Saisir le department">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Departement</mat-label>
+      <input matInput [(ngModel)]="selectedUser.department" placeholder="Saisir le department">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="updateUser()">Enregistrer</button>
+    <button mat-raised-button color="warn" (click)="cancelEdit()">Annuler</button>
+  </div>
+</div>
