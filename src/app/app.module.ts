@@ -37,7 +37,8 @@ import { LoginComponent } from './components/login/login.component';
     AdminLayoutComponent,
     AddUserDialogComponent,
     SearchPipe,
-    LoginComponent
+    LoginComponent,
+    
   ],
   imports: [
     BrowserAnimationsModule,

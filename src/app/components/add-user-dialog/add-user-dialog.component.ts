@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from 'app/shared/user/user.model';
+import { UserServiceTsService } from 'app/shared/user/user.service.ts.service';
 
 @Component({
   selector: 'app-add-user-dialog',
@@ -9,10 +10,12 @@ import { User } from 'app/shared/user/user.model';
 })
 export class AddUserDialogComponent {
   user: User = new User(0, '', '', '', '');
+  errorMessage: string = ''; // ✅ Stocker le message d'erreur
 
   constructor(
     public dialogRef: MatDialogRef<AddUserDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private userService: UserServiceTsService // ✅ Injecter le service
   ) {}
 
   onNoClick(): void {
@@ -21,10 +24,21 @@ export class AddUserDialogComponent {
 
   saveUser(): void {
     if (this.user.name.trim() && this.user.email.trim()) {
-      console.log('Saving user:', this.user); // ✅ Debug
-      this.dialogRef.close(this.user); // Send back to parent
+      console.log('Saving user:', this.user);
+      
+      this.userService.addUser(this.user).subscribe(
+        (response) => {
+          alert('Utilisateur ajouté avec succès !');
+          this.dialogRef.close(response); // ✅ Ferme la boîte de dialogue avec l'utilisateur ajouté
+        },
+        (error) => {
+          this.errorMessage = error;
+          alert(error); // ✅ Afficher une alerte si l'email existe déjà
+        }
+      );
+      
     } else {
-      alert('Name and Email are required');
+      alert('Le nom et l\'email sont obligatoires.');
     }
   }
-}  
+}
