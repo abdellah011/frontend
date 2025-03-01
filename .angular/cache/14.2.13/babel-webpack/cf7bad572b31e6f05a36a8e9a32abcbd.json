@@ -1,1 +1,0 @@
-{"ast":null,"code":"export class User {\n  constructor(id, name, email, department) {\n    this.id = id;\n    this.name = name;\n    this.email = email;\n    this.department = department;\n    this.Password = Password;\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}

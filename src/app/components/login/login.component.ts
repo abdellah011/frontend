@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'app/services/auth.service';
-import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +14,6 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private auth:AuthService,
      private router: Router,
-    private toast: NgToastService
     
     ) { }
 
@@ -32,11 +30,6 @@ export class LoginComponent implements OnInit {
 
         next:(res)=>{
           alert(res.message)
-          this.toast.success({
-            detail: "SUCCESS",
-            summary: res.message,
-            duration: 5000
-          });
           this.router.navigate(['../../pages/dashboard']);
 
         },

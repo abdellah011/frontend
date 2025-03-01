@@ -1,7 +1,6 @@
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ToastrModule } from "ngx-toastr";
 import { FormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms'; // ✅ Import de ReactiveFormsModule
@@ -23,7 +22,6 @@ import { SidebarModule } from './sidebar/sidebar.module';
 import { FooterModule } from './shared/footer/footer.module';
 import { NavbarModule } from './shared/navbar/navbar.module';
 import { FixedPluginModule } from './shared/fixedplugin/fixedplugin.module';
-import { NgToastModule } from 'ng-angular-popup';
 
 // ✅ Components
 import { AppComponent } from './app.component';
@@ -51,8 +49,6 @@ import { LoginComponent } from './components/login/login.component';
     
     ReactiveFormsModule,
     HttpClientModule,
-    NgToastModule,
-    ToastrModule.forRoot(),
 
     // ✅ Angular Material Modules
     MatDialogModule,
