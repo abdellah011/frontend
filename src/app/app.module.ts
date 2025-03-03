@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { NgToastModule } from 'ng-angular-popup';
 
 // ✅ Custom Modules
 import { SidebarModule } from './sidebar/sidebar.module';
@@ -49,6 +50,7 @@ import { LoginComponent } from './components/login/login.component';
     
     ReactiveFormsModule,
     HttpClientModule,
+    NgToastModule,
 
     // ✅ Angular Material Modules
     MatDialogModule,
