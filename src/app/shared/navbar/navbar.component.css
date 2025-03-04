@@ -1,0 +1,73 @@
+/* 🌟 Style général du formulaire */
+form {
+    max-width: 400px;
+    margin: 50px auto; /* Centrage du formulaire */
+    padding: 20px;
+    border-radius: 10px;
+    background: #f9f9f9; /* Couleur de fond */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* 📌 Espacement des champs */
+  .mb-3 {
+    margin-bottom: 15px;
+  }
+  
+  /* 🏷️ Style des labels */
+  .form-label {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* 🔲 Style des champs input */
+  .form-control {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* 🎨 Effet au focus sur les champs */
+  .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* ❌ Messages d'erreur */
+  .text-danger {
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  /* 🔘 Bouton Submit */
+  .btn-primary {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #007bff, #0056b3); /* Dégradé bleu */
+    border: none;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* 🌟 Effet au survol */
+  .btn-primary:hover {
+    background: linear-gradient(45deg, #0056b3, #003d80);
+    transform: scale(1.02);
+  }
+  
+  /* 📱 Adaptation pour mobile */
+  @media (max-width: 500px) {
+    form {
+      width: 90%;
+      padding: 15px;
+    }
+  
+    .btn-primary {
+      font-size: 14px;
+      padding: 8px;
+    }
+  }
+  

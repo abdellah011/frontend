@@ -12,6 +12,7 @@
           <th>Nom</th>
           <th>Email</th>
           <th>Departement</th>
+          <th>Role</th>
           <th>Mot de Passe</th>
           <th>Actions</th>
         </tr>
@@ -22,7 +23,8 @@
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.department }}</td>
-          <td>{{ user.Password }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{ user.password }}</td>
           
           <td>
             <button mat-button color="primary" (click)="editUser(user)">Modifier</button>
@@ -49,12 +51,16 @@
   
     <mat-form-field class="full-width">
       <mat-label>Mot de passe</mat-label>
-      <input matInput [(ngModel)]="selectedUser.Password" placeholder="Saisir le department">
+      <input matInput [(ngModel)]="selectedUser.password" placeholder="Saisir le department">
     </mat-form-field>
 
     <mat-form-field class="full-width">
       <mat-label>Departement</mat-label>
       <input matInput [(ngModel)]="selectedUser.department" placeholder="Saisir le department">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Role</mat-label>
+      <input matInput [(ngModel)]="selectedUser.role" placeholder="Saisir le Role">
     </mat-form-field>
 
     <button mat-raised-button color="primary" (click)="updateUser()">Enregistrer</button>

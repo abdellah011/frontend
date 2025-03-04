@@ -2,7 +2,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule} from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms'; // ✅ Import de ReactiveFormsModule
 
 
@@ -31,6 +31,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { AddUserDialogComponent } from './components/add-user-dialog/add-user-dialog.component';
 import { SearchPipe } from './search.pipe';
 import { LoginComponent } from './components/login/login.component';
+import { tokenInterceptor } from "./interceptors/token.interceptor";
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,7 +70,11 @@ import { LoginComponent } from './components/login/login.component';
     FixedPluginModule
     ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA], // ✅ Add this if needed
-  providers: [],
+  providers: [{
+    provide:HTTP_INTERCEPTORS,
+    useClass:tokenInterceptor,
+    multi:true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

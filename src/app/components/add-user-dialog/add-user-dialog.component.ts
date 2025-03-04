@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from 'app/shared/user/user.model';
 import { UserServiceTsService } from 'app/shared/user/user.service.ts.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-user-dialog',
@@ -9,7 +10,7 @@ import { UserServiceTsService } from 'app/shared/user/user.service.ts.service';
   styleUrls: ['./add-user-dialog.component.css']
 })
 export class AddUserDialogComponent {
-  user: User = new User(0, '', '', '', '');
+  user: User = new User(0, '', '', '', '','');
   errorMessage: string = ''; // ✅ Stocker le message d'erreur
 
   constructor(
@@ -28,17 +29,40 @@ export class AddUserDialogComponent {
       
       this.userService.addUser(this.user).subscribe(
         (response) => {
-          alert('Utilisateur ajouté avec succès !');
-          this.dialogRef.close(response); // ✅ Ferme la boîte de dialogue avec l'utilisateur ajouté
+          Swal.fire({
+            title: "Utilisateur ajouté ✅",
+            text: "L'utilisateur a été ajouté avec succès !",
+            icon: "success",
+            timer: 1000, // ✅ Le popup disparaît après 3 secondes
+        showConfirmButton: false, // ✅ Supprime le bouton "OK"
+        position: "top" // ✅ Position en haut à droite
+          }).then(() => {
+            this.dialogRef.close(response); // ✅ Fermer la boîte de dialogue après confirmation
+          });
         },
         (error) => {
           this.errorMessage = error;
-          alert(error); // ✅ Afficher une alerte si l'email existe déjà
+
+          Swal.fire({
+            title: "Erreur ❌",
+            text: "L'email existe déjà ou une autre erreur est survenue.",
+            icon: "error",
+            timer: 1000, // ✅ Le popup disparaît après 3 secondes
+            showConfirmButton: false, // ✅ Supprime le bouton "OK"
+            position: "top" // ✅ Position en haut à droite
+          });
         }
       );
       
     } else {
-      alert('Le nom et l\'email sont obligatoires.');
+      Swal.fire({
+        title: "Champs obligatoires ⚠️",
+        text: "Le nom et l'email sont obligatoires.",
+        icon: "warning",
+        timer: 1000, // ✅ Le popup disparaît après 3 secondes
+        showConfirmButton: false, // ✅ Supprime le bouton "OK"
+        position: "top" // ✅ Position en haut à droite
+      });
     }
   }
 }
