@@ -13,37 +13,41 @@ import Swal from 'sweetalert2';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
-    private userStore :UserStoreService
-  ) { }
+    private userStore: UserStoreService
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      name: ['', [Validators.required]],
-      Password: ['', [Validators.required]]
+      name: ['', Validators.required], 
+      password: ['', Validators.required] // ✅ Correction: 'Password' devient 'password'
     });
+  }
+
+  // ✅ Récupération sécurisée des contrôles du formulaire
+  get formControls() {
+    return this.loginForm.controls;
   }
 
   onlogin() { 
     if (this.loginForm.valid) {
       this.auth.login(this.loginForm.value).subscribe({
-
         next: (res) => {
           Swal.fire({
             title: "Connexion réussie ✅",
             text: res.message,
             icon: "success",
-            timer: 1000, // ✅ Le popup disparaît après 3 secondes
-        showConfirmButton: false, // ✅ Supprime le bouton "OK"
-        position: "top" // ✅ Position en haut à droite
+            timer: 1000,
+            showConfirmButton: false,
+            position: "top"
           }).then(() => {
             this.auth.storeToken(res.token);
-            let tokenPayload =this.auth.decodeToken();
+            let tokenPayload = this.auth.decodeToken();
             this.userStore.setFullName(tokenPayload.unique_name);
-            this.router.navigate(['../../pages/dashboard']);
-            
+            this.router.navigate(['/dashboard']); // ✅ Correction chemin
           });
         },
 
@@ -52,24 +56,21 @@ export class LoginComponent implements OnInit {
             title: "Erreur ❌",
             text: err?.error.message || "Une erreur s'est produite",
             icon: "error",
-            timer: 1000, // ✅ Le popup disparaît après 3 secondes
-        showConfirmButton: false, // ✅ Supprime le bouton "OK"
-        position: "top" // ✅ Position en haut à droite
+            timer: 1000,
+            showConfirmButton: false,
+            position: "top"
           });
         }
-        
       });
     } else {
-      console.log('Formulaire non valide');
       this.validateFormFields(this.loginForm); 
-      
       Swal.fire({
         title: "Formulaire invalide ⚠️",
         text: "Veuillez remplir tous les champs obligatoires",
         icon: "warning",
-        timer: 1000, // ✅ Le popup disparaît après 3 secondes
-        showConfirmButton: false, // ✅ Supprime le bouton "OK"
-        position: "top" // ✅ Position en haut à droite
+        timer: 1000,
+        showConfirmButton: false,
+        position: "top"
       });
     }
   }
@@ -79,6 +80,7 @@ export class LoginComponent implements OnInit {
       const control = formGroup.get(field);
       if (control instanceof FormControl) {
         control.markAsDirty({ onlySelf: true });
+        control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup) {
         this.validateFormFields(control);
       }

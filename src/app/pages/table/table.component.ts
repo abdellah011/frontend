@@ -1,92 +1,119 @@
-  import { Component, OnInit } from '@angular/core';
-  import { UserServiceTsService } from 'app/shared/user/user.service.ts.service';
-  import { User } from 'app/shared/user/user.model';
-  import { AddUserDialogComponent } from 'app/components/add-user-dialog/add-user-dialog.component';
-  import { MatDialog } from '@angular/material/dialog';
-import { UserStoreService } from 'app/services/userStore/user-store.service';
-import { AuthService } from 'app/services/auth.service';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { UserServiceTsService } from 'app/shared/user/user.service.ts.service';
+import { User } from 'app/shared/user/user.model';
+import { MatDialog } from '@angular/material/dialog';
+import { AddUserDialogComponent } from 'app/components/add-user-dialog/add-user-dialog.component';
 
-  @Component({
-    selector: 'app-table',
-    templateUrl: './table.component.html',
-  })
-  export class TableComponent implements OnInit {
-    users: User[] = [];
-    isEditing: boolean = false;
-    selectedUser: User | null = null;
+@Component({
+  selector: 'app-table',
+  templateUrl: './table.component.html',
+})
+export class TableComponent implements OnInit, AfterViewInit {
+  displayedColumns: string[] = ['id', 'name', 'email', 'department', 'role', 'password', 'actions'];
+  dataSource = new MatTableDataSource<User>([]); // ✅ Correction : initialisation correcte
 
-    constructor(
-      private userServiceTsService: UserServiceTsService,
-      public dialog: MatDialog,
-      private userStore:UserStoreService,
-      private auth:AuthService
-    ) {}
+  @ViewChild(MatPaginator) paginator!: MatPaginator; // ✅ Ajout du paginator avec ViewChild
 
-    ngOnInit(): void {
-      this.loadUsers();
-    }
-    
+  searchId: string = '';
+  isEditing: boolean = false;
+  selectedUser: User | null = null;
+  users: User[] = [];
 
-    // Load all users from API
-    loadUsers(): void {
-      this.userServiceTsService.getUsers().subscribe({
-        next: (data: User[]) => {
-          this.users = data;
-          console.log("Utilisateurs récupérés :", data);
+  constructor(
+    private userServiceTsService: UserServiceTsService,
+    public dialog: MatDialog
+  ) {}
 
-        },
-        error: (err) => {
-          console.error('Error fetching users:', err);
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+        console.log("✅ Paginator bien assigné !");
+      } else {
+        console.error("❌ Erreur : Paginator non trouvé !");
+      }
+    });
+  }
+
+  // ✅ Charger les utilisateurs depuis l'API
+  loadUsers(): void {
+    this.userServiceTsService.getUsers().subscribe({
+      next: (data: User[]) => {
+        console.log("📢 Données récupérées depuis l'API :", data);
+
+        if (!data || data.length === 0) {
+          console.warn("⚠️ Aucun utilisateur trouvé !");
         }
-      });
-    }
 
-    // ✅ Open Add User Dialog
-    addUser(): void {
-      const dialogRef = this.dialog.open(AddUserDialogComponent, {
-        width: '400px',
-        autoFocus: true,      // ✅ Automatically focus dialog content
-        disableClose: false   // Allows closing on clicking outside (optional)
-      });
-    
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          this.userServiceTsService.addUser(result).subscribe(() => this.loadUsers());
-        }
-      });
-    }
-    
-    
-    // ✅ Edit User
-    editUser(user: User): void {
-      this.selectedUser = { ...user };
-      this.isEditing = true;
-    }
-    updateUser(): void {
-      if (this.selectedUser) {
-        this.userServiceTsService.updateUser(this.selectedUser).subscribe({
-          next: () => {
-            this.loadUsers(); // Refresh table
-            this.cancelEdit(); // Exit edit mode
+        this.users = data;
+        this.dataSource.data = data; // ✅ Correction : mise à jour correcte de `dataSource`
 
-          },
-          error: (err) => {
-            console.error('Error updating user:', err);
+        setTimeout(() => {
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
           }
         });
+      },
+      error: (err) => {
+        console.error('🚨 Erreur lors de la récupération des utilisateurs:', err);
       }
-    }
-    
-
-    // ✅ Delete User
-    deleteUser(id: number): void {
-      this.userServiceTsService.deleteUser(id).subscribe(() => this.loadUsers());
-    }
-
-    // ✅ Cancel Edit
-    cancelEdit(): void {
-      this.isEditing = false;
-      this.selectedUser = null;
-    }
-    
+    });
   }
+
+  // ✅ Filtrer les utilisateurs par ID
+  applyFilter(): void {
+    this.dataSource.filter = this.searchId.trim().toLowerCase();
+  }
+
+  // ✅ Ajouter un utilisateur via un dialogue
+  addUser(): void {
+    const dialogRef = this.dialog.open(AddUserDialogComponent, {
+      width: '400px',
+      autoFocus: true,      
+      disableClose: false  
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.userServiceTsService.addUser(result).subscribe(() => this.loadUsers());
+      }
+    });
+  }
+
+  // ✅ Modifier un utilisateur
+  editUser(user: User): void {
+    this.selectedUser = { ...user };
+    this.isEditing = true;
+  }
+
+  updateUser(): void {
+    if (this.selectedUser) {
+      this.userServiceTsService.updateUser(this.selectedUser).subscribe({
+        next: () => {
+          this.loadUsers();
+          this.cancelEdit();
+        },
+        error: (err) => {
+          console.error("Erreur lors de la mise à jour de l'utilisateur:", err);
+        }
+      });
+    }
+  }
+
+  // ✅ Supprimer un utilisateur
+  deleteUser(id: number): void {
+    this.userServiceTsService.deleteUser(id).subscribe(() => this.loadUsers());
+  }
+
+  // ✅ Annuler la modification
+  cancelEdit(): void {
+    this.isEditing = false;
+    this.selectedUser = null;
+  }
+}

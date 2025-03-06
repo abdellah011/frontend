@@ -1,46 +1,82 @@
 <div class="card">
-  <div class="card-header">
+  <div class="card-header d-flex justify-content-between align-items-center">
     <h4 class="card-title">Table d'utilisateurs</h4>
-    <button mat-raised-button color="primary" (click)="addUser()">Ajouter utilisateur</button>
+
+    <div class="d-flex gap-3">
+      <!-- ✅ Champ de recherche -->
+      <mat-form-field appearance="outline">
+        <mat-label>Rechercher par ID</mat-label>
+        <input matInput [(ngModel)]="searchId" placeholder="Entrez l'ID" (input)="applyFilter()">
+      </mat-form-field>
+
+      <!-- ✅ Bouton Ajouter -->
+      <button mat-raised-button color="primary" (click)="addUser()">Ajouter utilisateur</button>
+    </div>
   </div>
 
   <div class="card-body">
-    <table class="table">
-      <thead class="text-primary">
-        <tr>
-          <th>ID</th>
-          <th>Nom</th>
-          <th>Email</th>
-          <th>Departement</th>
-          <th>Role</th>
-          <th>Mot de Passe</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of users"> 
-          <td>{{ user.id }}</td>
-          <td>{{ user.name }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.department }}</td>
-          <td>{{ user.role }}</td>
-          <td>{{ user.password }}</td>
-          
-          <td>
-            <button mat-button color="primary" (click)="editUser(user)">Modifier</button>
-            <button mat-button color="warn" (click)="deleteUser(user.id)">Supprimer</button>
-          </td>
-        </tr>
-      </tbody>
+    <table *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+      </ng-container>
+    
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Nom </th>
+        <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+      </ng-container>
+    
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+      </ng-container>
+    
+      <ng-container matColumnDef="department">
+        <th mat-header-cell *matHeaderCellDef> Département </th>
+        <td mat-cell *matCellDef="let user">{{ user.department }}</td>
+      </ng-container>
+    
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef> Rôle </th>
+        <td mat-cell *matCellDef="let user">{{ user.role }}</td>
+      </ng-container>
+    
+      <ng-container matColumnDef="password">
+        <th mat-header-cell *matHeaderCellDef> Mot de Passe </th>
+        <td mat-cell *matCellDef="let user">{{ user.password }}</td>
+      </ng-container>
+    
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let user">
+          <button mat-icon-button color="primary" (click)="editUser(user)">
+            <i class="fa-solid fa-user-pen"></i>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let user; columns: displayedColumns;"></tr>
     </table>
+    
+    <!-- ✅ Pagination -->
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    
+    <!-- ✅ Affichage si aucun utilisateur n'est trouvé -->
+    <p *ngIf="dataSource.data.length === 0" class="text-center text-danger">⚠️ Aucun utilisateur trouvé.</p>
   </div>
+  
 
-  <!-- ✅ Edit Form -->
+  <!-- ✅ Formulaire d'édition -->
   <div *ngIf="isEditing" class="edit-form mt-3">
     <h5>Modification d'utilisateur</h5>
+
     <mat-form-field class="full-width">
       <mat-label>Nom</mat-label>
-      <input matInput [(ngModel)]="selectedUser.name" placeholder=" Saisir le nom d'utilisateur">
+      <input matInput [(ngModel)]="selectedUser.name" placeholder="Saisir le nom d'utilisateur">
     </mat-form-field>
 
     <mat-form-field class="full-width">
@@ -48,19 +84,19 @@
       <input matInput [(ngModel)]="selectedUser.email" placeholder="Saisir l'email d'utilisateur">
     </mat-form-field>
 
-  
     <mat-form-field class="full-width">
       <mat-label>Mot de passe</mat-label>
-      <input matInput [(ngModel)]="selectedUser.password" placeholder="Saisir le department">
+      <input matInput [(ngModel)]="selectedUser.password" placeholder="Saisir le mot de passe">
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <mat-label>Departement</mat-label>
-      <input matInput [(ngModel)]="selectedUser.department" placeholder="Saisir le department">
+      <mat-label>Département</mat-label>
+      <input matInput [(ngModel)]="selectedUser.department" placeholder="Saisir le département">
     </mat-form-field>
+
     <mat-form-field class="full-width">
-      <mat-label>Role</mat-label>
-      <input matInput [(ngModel)]="selectedUser.role" placeholder="Saisir le Role">
+      <mat-label>Rôle</mat-label>
+      <input matInput [(ngModel)]="selectedUser.role" placeholder="Saisir le rôle">
     </mat-form-field>
 
     <button mat-raised-button color="primary" (click)="updateUser()">Enregistrer</button>

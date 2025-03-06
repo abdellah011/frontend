@@ -1,14 +1,129 @@
-<form [formGroup]   ="loginForm!">
-    <div class="mb-3" >
-      <label for="exampleInputEmail1" class="form-label">Nom </label>
-      <input formControlName="name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    </div>
-    <small  *ngIf="loginForm.controls['name'].dirty && loginForm.controls['name'].hasError('required')"class="text-danger">Username reqiurede</small>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Password</label>
-      <input formControlName="Password" type="password" class="form-control" id="exampleInputPassword1">
-    </div>
-    <small  *ngIf="loginForm.controls['Password'].dirty && loginForm.controls['Password'].hasError('required')"class="text-danger">Psswordreqiurede</small> <tr></tr>
+<style>
+  .divider:after,
+  .divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+  }
+  
+  .h-custom {
+    height: calc(100% - 73px);
+  }
 
-    <button (click)="onlogin()" type="submit" class="btn btn-primary">Submit</button>
-  </form>
+  @media (max-width: 450px) {
+    .h-custom {
+      height: 100%;
+    }
+  }
+
+  /* ✅ Amélioration du style des champs input */
+  .form-control {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+    background-color: #f8f9fa;
+  }
+
+  /* ✅ Effet au survol */
+  .form-control:hover {
+    border-color: #007bff;
+  }
+
+  /* ✅ Effet quand l'utilisateur clique sur le champ */
+  .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    outline: none;
+    background-color: #ffffff;
+  }
+
+  /* ✅ Amélioration du bouton */
+  .btn-primary {
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* ✅ Effet au survol du bouton */
+  .btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+
+</style>
+
+  <section class="vh-100">
+    <div class="container-fluid h-custom">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-9 col-lg-6 col-xl-5">
+          <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+            class="img-fluid"
+            alt="Sample image"
+          />
+        </div>
+
+        <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+          <!-- ✅ Formulaire Angular avec Reactive Forms -->
+          <form [formGroup]="loginForm">
+            <div class="divider d-flex align-items-center my-4">
+               <h1><p class="text-center fw-bold mx-3 mb-0">Login</p></h1>
+            </div>  
+
+            <!-- Nom -->
+            <div class="form-outline mb-4">
+              <label class="form-label" for="name">Nom</label>
+              <input
+                formControlName="name"
+                type="text"
+                id="name"
+                class="form-control form-control-lg"
+                placeholder="Entrez votre nom"
+              />
+              <small
+                *ngIf="formControls['name']?.touched && formControls['name']?.hasError('required')"
+                class="text-danger"
+              >
+                ⚠ Le nom est requis.
+              </small>
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="form-outline mb-3">
+              <label class="form-label" for="password">Mot de passe</label>
+              <input
+                formControlName="password"
+                type="password"
+                id="password"
+                class="form-control form-control-lg"
+                placeholder="Entrez votre mot de passe"
+              />
+              <small
+                *ngIf="formControls['password']?.touched && formControls['password']?.hasError('required')"
+                class="text-danger"
+              >
+                ⚠ Le mot de passe est requis.
+              </small>
+            </div>
+
+            <!-- Bouton de connexion -->
+            <div class="text-center text-lg-start mt-4 pt-2">
+              <button
+                type="button"
+                class="btn btn-primary btn-lg"
+                style="padding-left: 2.5rem; padding-right: 2.5rem"
+                (click)="onlogin()"
+                [disabled]="loginForm.invalid"
+              >
+                Login
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
