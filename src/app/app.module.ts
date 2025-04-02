@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms'; // ✅ Import de ReactiveF
 
 
 
+
 // ✅ Angular Material Modules
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,7 +30,6 @@ import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AddUserDialogComponent } from './components/add-user-dialog/add-user-dialog.component';
-import { SearchPipe } from './search.pipe';
 import { LoginComponent } from './components/login/login.component';
 import { tokenInterceptor } from "./interceptors/token.interceptor";
 @NgModule({
@@ -37,8 +37,9 @@ import { tokenInterceptor } from "./interceptors/token.interceptor";
     AppComponent,
     AdminLayoutComponent,
     AddUserDialogComponent,
-    SearchPipe,
     LoginComponent,
+    
+
     
   ],
   imports: [
