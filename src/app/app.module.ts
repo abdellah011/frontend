@@ -1,9 +1,14 @@
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule} from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms'; // ✅ Import de ReactiveFormsModule
+import { provideApollo } from 'apollo-angular';
+import { HttpLink } from 'apollo-angular/http';
+import { InMemoryCache } from '@apollo/client/core';
+import { LucideAngularModule } from 'lucide-angular';
+import { FileText, ChevronDown } from 'lucide-angular';
 
 
 
@@ -21,9 +26,7 @@ import { NgToastModule } from 'ng-angular-popup';
 
 // ✅ Custom Modules
 import { SidebarModule } from './sidebar/sidebar.module';
-import { FooterModule } from './shared/footer/footer.module';
 import { NavbarModule } from './shared/navbar/navbar.module';
-import { FixedPluginModule } from './shared/fixedplugin/fixedplugin.module';
 
 // ✅ Components
 import { AppComponent } from './app.component';
@@ -38,23 +41,17 @@ import { tokenInterceptor } from "./interceptors/token.interceptor";
     AdminLayoutComponent,
     AddUserDialogComponent,
     LoginComponent,
-    
-
-    
   ],
   imports: [
     BrowserAnimationsModule,
+    LucideAngularModule.pick({ FileText, ChevronDown }),
     ReactiveFormsModule,
-    RouterModule.forRoot(AppRoutes, {
-      useHash: true
-    }),
+    RouterModule.forRoot(AppRoutes, { useHash: true }),
     FormsModule,
-    
-    ReactiveFormsModule,
     HttpClientModule,
     NgToastModule,
 
-    // ✅ Angular Material Modules
+    // Angular Material
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -64,18 +61,25 @@ import { tokenInterceptor } from "./interceptors/token.interceptor";
     MatTableModule,
     MatSortModule,
 
-    // ✅ Custom Modules
+    // Custom Modules
     SidebarModule,
     NavbarModule,
-    FooterModule,
-    FixedPluginModule
-    ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA], // ✅ Add this if needed
-  providers: [{
-    provide:HTTP_INTERCEPTORS,
-    useClass:tokenInterceptor,
-    multi:true
-  }],
-  bootstrap: [AppComponent]
+  ],
+  providers: [
+    provideApollo(() => {
+      const httpLink = inject(HttpLink);
+      return {
+        link: httpLink.create({ uri: 'http://localhost:5280/graphql' }),
+        cache: new InMemoryCache(),
+      };
+    }),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: tokenInterceptor,
+      multi: true,
+    },
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

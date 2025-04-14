@@ -3,19 +3,52 @@
   <div class="logo">
     <a href="http://www.creative-tim.com" class="simple-text logo-mini">
       <div class="logo-image-small">
-        <img src="assets/img/angular2-logo.png">
+        <img src="assets/img/logoCPG.png">
       </div>
     </a>
-    <a href="https://www.creative-tim.com" class="simple-text logo-normal">
-      Creative Tim
-    </a>
+    <a class="simple-text logo-normal">DokkU</a>
   </div>
-    <ul class="nav">
-        <li *ngFor="let menuItem of menuItems" routerLinkActive="active" class="{{menuItem.class}}">
-            <a [routerLink]="[menuItem.path]">
-                <i class="nc-icon {{menuItem.icon}}"></i>
-                <p>{{menuItem.title}}</p>
+
+  <ul class="nav">
+    <li *ngFor="let menuItem of menuItems" class="{{menuItem.class}}" routerLinkActive="active">
+      
+      <!-- Menu with children (like Document) -->
+      <ng-container *ngIf="menuItem.children; else singleLink">
+        <a
+          href="javascript:void(0)"
+          (click)="toggleMenu(menuItem)"
+          class="document-link"
+          style="display: flex; align-items: center; justify-content: space-between; position: relative;"
+        >
+          <div style="display: flex; align-items: center;">
+            <i class="nc-icon {{menuItem.icon}}"></i>
+            <p style="margin: 0 0 0 8px;">{{menuItem.title}}</p>
+          </div>
+      
+          <i class="fa fa-chevron-down" [class.rotate]="menuItem.isOpen" style="font-size: 10px; color: #888;"></i>
+
+        </a>
+      
+        <ul *ngIf="menuItem.isOpen" class="nav">
+          <li *ngFor="let child of menuItem.children" class="{{child.class}}" routerLinkActive="active">
+            <a [routerLink]="[child.path]" style="margin-left: 30px;">
+              <i class="nc-icon {{child.icon}}"></i>
+              <p>{{child.title}}</p>
             </a>
-        </li>
-    </ul>
+          </li>
+        </ul>
+        
+      </ng-container>
+      
+
+      <!-- Menu without children -->
+      <ng-template #singleLink>
+        <a [routerLink]="[menuItem.path]">
+          <i class="nc-icon {{menuItem.icon}}"></i>
+          <p>{{menuItem.title}}</p>
+        </a>
+      </ng-template>
+
+    </li>
+  </ul>
 </div>

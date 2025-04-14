@@ -18,7 +18,9 @@ export class LoginComponent implements OnInit {
     private auth: AuthService,
     private router: Router,
     private userStore: UserStoreService
-  ) {}
+  ) {
+    
+  }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({

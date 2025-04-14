@@ -1,1 +1,0 @@
-{"ast":null,"code":"import { __decorate } from \"tslib\";\nimport { Component } from '@angular/core';\nlet IconsComponent = class IconsComponent {};\nIconsComponent = __decorate([Component({\n  selector: 'icons-cmp',\n  templateUrl: 'icons.component.html'\n})], IconsComponent);\nexport { IconsComponent };","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

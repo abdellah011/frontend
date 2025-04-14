@@ -1,0 +1,76 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+
+      <div class="border rounded p-5 mb-5 bg-light shadow-sm">
+
+        <!-- Title -->
+        <h4 class="mb-4 text-center text-dark fw-semibold">
+          <i class="bi bi-upload me-2 text-primary"></i>
+          Importer un fichier
+        </h4>
+
+        <!-- File input -->
+        <div class="mb-3">
+          <label for="fileInput" class="form-label text-muted">Choisissez un fichier à analyser :</label>
+          <input type="file" id="fileInput" class="form-control" (change)="onFileSelected($event)">
+        </div>
+
+        <!-- File name preview -->
+        <div *ngIf="selectedFile" class="small text-secondary mb-3">
+          Fichier sélectionné : <strong>{{ selectedFile.name }}</strong>
+        </div>
+
+        <!-- Upload button -->
+        <div class="d-grid">
+          <button class="btn fw-semibold text-white"
+          style="background-color: #0270e5"(click)="uploadFile()" [disabled]="isLoading || !selectedFile">
+            <i class="bi bi-arrow-up-circle me-1"></i> Lancer l'extraction
+          </button>
+        </div>
+
+        <!-- Progress -->
+        <div *ngIf="isLoading" class="mt-3">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          <small class="text-muted d-block mt-2">
+            <i class="bi bi-hourglass-split me-1"></i>Analyse en cours...
+          </small>
+        </div>
+
+        <!-- Error -->
+        <div *ngIf="hasError && !isLoading" class="alert alert-danger mt-3 d-flex align-items-center">
+          <i class="bi bi-x-octagon-fill me-2"></i>
+          Une erreur est survenue lors du traitement.
+        </div>
+
+        <!-- Response -->
+        <div *ngIf="response && !isLoading" class="mt-4">
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Texte extrait</label>
+            <div class="p-3 bg-light border rounded">
+              {{ response.full_text }}
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Catégorie détectée</label>
+              <div class="p-2 bg-light border rounded">
+                {{ response.category }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">ID</label>
+              <div class="p-2 bg-light border rounded">
+                {{ 'doc-' + ('000' + response.id).slice(-3) }}
+              </div>
+            </div>
+          </div>
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>

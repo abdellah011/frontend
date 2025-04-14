@@ -1,0 +1,94 @@
+<div class="container mt-4">
+  <h2>Choisissez une catégorie</h2>
+  <div class="row">
+    <!-- Boîtes de sélection de catégorie -->
+    <div class="col-md-4 mb-3" *ngFor="let cat of categories">
+      <div
+        class="card text-center"
+        style="cursor: pointer"
+        [ngStyle]="selectedCategorie === cat ? {'background-color': '#007bff', 'color': 'white'} : {}"
+        (click)="selectCategorie(cat)"
+      >
+        <div class="card-body">
+          <h5 class="card-title">{{ cat | uppercase }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Affichage de la table si une catégorie est choisie -->
+  <div class="container mt-4" *ngIf="selectedCategorie">
+    <h2>Catégorie: {{ selectedCategorie | uppercase }}</h2>
+
+    <!-- Champs pour filtrer -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Filtrer par nom"
+          [(ngModel)]="filterNom"
+          (input)="appliquerFiltres()"
+        >
+      </div>
+      <div class="col-md-6">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Filtrer par ID (ex: doc-001)"
+          [(ngModel)]="filterId"
+          (input)="appliquerFiltres()"
+        >
+      </div>
+    </div>
+
+    <!-- Table Angular Material -->
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-100">
+      <!-- Nom -->
+      <ng-container matColumnDef="nom">
+        <th mat-header-cell *matHeaderCellDef> NOM DU FICHIER </th>
+        <td mat-cell *matCellDef="let fichier"> {{ fichier.nom }} </td>
+      </ng-container>
+
+      <!-- ID formaté -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let fichier"> {{ 'doc-' + ('000' + fichier.id).slice(-3) }} </td>
+      </ng-container>
+
+      <!-- Date d'ajout -->
+      <ng-container matColumnDef="dateAjout">
+        <th mat-header-cell *matHeaderCellDef> DATE </th>
+        <td mat-cell *matCellDef="let fichier"> {{ fichier.dateAjout | date:'short' }} </td>
+      </ng-container>
+
+      <!-- Actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> ACTIONS </th>
+        <td mat-cell *matCellDef="let fichier">
+          <!-- Voir -->
+          <a class="btn btn-outline-primary btn-sm" [href]="getFileUrl(fichier.nom)" target="_blank">
+            <i class="bi bi-eye-fill me-1"></i> Voir
+          </a>
+
+          <!-- Télécharger -->
+          <button class="btn btn-outline-success btn-sm mx-1" (click)="downloadFile(fichier.nom)">
+            <i class="bi bi-download me-1"></i> Télécharger
+          </button>
+
+          <!-- Supprimer -->
+          <button class="btn btn-outline-danger btn-sm" (click)="supprimerFichier(fichier.id)">
+            <i class="bi bi-trash-fill me-1"></i> Supprimer
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Table header + body -->
+      <tr mat-header-row *matHeaderRowDef="['nom', 'id', 'dateAjout', 'actions']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['nom', 'id', 'dateAjout', 'actions'];"></tr>
+    </table>
+
+    <!-- Paginator -->
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+  </div>
+</div>
